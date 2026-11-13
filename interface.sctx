@@ -1,0 +1,33 @@
+scchart interface {
+    // type:
+    // 0: NONE
+    // 1: FORWARD
+    // 2: BACKWARD
+    // 3: UNKNOWN
+
+    //num: first or second contact on the segment
+
+    // count: probably mod 4: we need to test this
+    // TODO: insert consts for track IDs
+
+
+    // contacts[track_id][num][type/count]
+    // WARNING: This breaks RailSL probably
+    input int contacts[48][2][2]
+
+    output bool lights[24]
+    // false: straght, true: branch
+    output bool points[30]
+
+    // signed byte negative: backwards
+    //WARNING: This breaks RailSL probably
+    output int trackSpeeds[48]
+    //signals[track_id][num][red/yellow/green]
+    // TODO: RailSL stuff + maybe interface people will manage this
+    output bool signals[48][2][3]
+
+    output bool gate_open
+    output bool mute_bell
+
+
+}

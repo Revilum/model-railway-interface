@@ -1,0 +1,3 @@
+[submodule "KiCoOO"]
+	path = KiCoOO
+	url = git@github.com:kieler/KiCoOO.git
