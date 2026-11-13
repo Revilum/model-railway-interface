@@ -1,18 +1,23 @@
 scchart interface {
-    // type:
-    // 0: NONE
-    // 1: FORWARD
-    // 2: BACKWARD
-    // 3: UNKNOWN
-
     //num: first or second contact on the segment
 
     // count: probably mod 4: we need to test this
     // TODO: insert consts for track IDs
 
 
-    // contacts[track_id][num][type/count]
+    
     // WARNING: This breaks RailSL probably
+    const int DIR_NONE = 0
+    const int DIR_FORWARD = 1
+    const int DIR_BACKWARD = 2
+    const int DIR_UNKNOWN = 3
+    /*
+    contacts[track_id][num][direction/count]
+    num: first or second contact on the track
+    NOTE: If a track has no contact the input values are undefined for the track segment.
+    0: direction of type DIR_* (in TCP protocol "type")
+    1: count TODO: What are these values??
+    */
     input int contacts[48][2][2]
 
     output bool lights[24]
@@ -26,8 +31,8 @@ scchart interface {
     // TODO: RailSL stuff + maybe interface people will manage this
     output bool signals[48][2][3]
 
-    output bool gate_open
-    output bool mute_bell
+    output bool openGate
+    output bool muteBell
 
     // funny constants hahaha
     const int KH_ST_0 = 0
