@@ -2,17 +2,13 @@
 
 set -euo pipefail
 
-if [[ -z "$1" ]]; then
-  echo "Error: Missing required argument." >&2
-  echo "Usage: $0 /path/to/chart.sctx" >&2
+if [[ "$#" -eq 0 ]]; then
+  echo "Error: At least one .sctx file is required." >&2
+  echo "Usage: $0 /path/to/chart1.sctx [/path/to/chart2.sctx ...]" >&2
   exit 1
 fi
 
 script_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
-input_file="$(realpath "$1")"
-temporary_json="$script_dir/.tmp.json"
-
-java -jar "$script_dir/kico.jar" -s de.cau.cs.kieler.sccharts.SCTXToJSON -o "$temporary_json" "$input_file"
 
 if [ ! -f "$script_dir/KiCoOO/build/jar/kicooo.jar" ]; then
   echo "compiling KiCoOO..."
@@ -23,6 +19,17 @@ generated_source_dir="$script_dir/src/main/java"
 runtime_source_dir="$generated_source_dir/kieler_gen/base_classes"
 mkdir -p "$generated_source_dir" "$runtime_source_dir"
 
-java -jar "$script_dir/KiCoOO/build/jar/kicooo.jar" "$generated_source_dir" java --no-main < "$temporary_json"
 cp "$script_dir/KiCoOO/misc/base_classes/"*.java "$runtime_source_dir/"
-rm -f "$temporary_json"
+
+temporary_json="$(mktemp "$script_dir/.tmp.XXXXXX.json")"
+trap 'rm -f -- "$temporary_json"' EXIT
+
+for input_file in "$@"; do
+  input_file="$(realpath -- "$input_file")"
+  java -jar "$script_dir/kico.jar" \
+    -s de.cau.cs.kieler.sccharts.SCTXToJSON \
+    -o "$temporary_json" \
+    "$input_file"
+  java -jar "$script_dir/KiCoOO/build/jar/kicooo.jar" \
+    "$generated_source_dir" java --no-main < "$temporary_json"
+done

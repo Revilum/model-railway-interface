@@ -1,16 +1,10 @@
 scchart interface {
-    //num: first or second contact on the segment
-
-    // count: probably mod 4: we need to test this
-    // TODO: insert consts for track IDs
-
-
-    
     // WARNING: This breaks RailSL probably
     const int DIR_NONE = 0
     const int DIR_FORWARD = 1
     const int DIR_BACKWARD = 2
     const int DIR_UNKNOWN = 3
+
     /*
     contacts[track_id][num][direction/count]
     num: first or second contact on the track
@@ -21,8 +15,10 @@ scchart interface {
     input int contacts[48][2][2]
 
     output bool lights[24]
-    // false: straght, true: branch
-    output bool points[30]
+    
+    const int STRAIGHT = 0
+    const int BRANCH = 1
+    output int points[30]
 
     // signed byte negative: backwards
     //WARNING: This breaks RailSL probably

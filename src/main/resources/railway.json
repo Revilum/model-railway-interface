@@ -1,0 +1,117 @@
+[
+    {
+        "name": "railPi0",
+        "address": "TODO",
+        "tracks": [
+            "OC_JCT_0",
+            "OI_LN_0",
+            "OC_LN_1",
+            "OI_LN_2",
+            "IC_JCT_0",
+            "IC_LN_1",
+            "IC_LN_4",
+            "KH_ST_5",
+            "KH_ST_6",
+            "KH_LN_5",
+            "KH_LN_6",
+            "OC_LN_4"
+        ],
+        "contacts": [
+            {
+                "name": "OI_LN_0",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_0",
+                "number": 0
+            },
+            {
+                "name": "KIO_LN_1",
+                "number": 0
+            },
+            {
+                "name": "IC_LN_4",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_3",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_4",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_5",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_5",
+                "number": 1
+            },
+            {
+                "name": "OI_LN_2",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_6",
+                "number": 1
+            },
+            {
+                "name": "OC_LN_5",
+                "number": 0
+            },
+            {
+                "name": "OC_LN_4",
+                "number": 1
+            },
+            {
+                "name": "OI_LN_0",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_2",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_0",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_1",
+                "number": 0
+            },
+            {
+                "name": "OC_LN_1",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_1",
+                "number": 1
+            }
+        ],
+        "points": [
+            "PNT_5",
+            "PNT_6",
+            "PNT_7",
+            "PNT_8",
+            "PNT_9",
+            "PNT_10",
+            "PNT_11",
+            "PNT_12",
+            "PNT_13",
+            "PNT_14"
+        ],
+        "signals": [
+            "TODO: Why number"
+        ],
+        "lights": [
+            "L_6",
+            "L_7",
+            "L_8",
+            "L_9",
+            "L_10",
+            "L_11"
+        ]
+    }
+]

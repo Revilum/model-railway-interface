@@ -18,5 +18,8 @@ mvn install
 
 You can find the compiled `.jar` in the `target/` directory.
 
+## How to build an SCChart for the model railway
+You need to reference the chart `charts/interface.sctx`. The chart defines all inputs/outputs that are being used to communicate with the model railway. We highly recommend to not modify this chart, but instead create a new chart that references the interface chart. Please name this chart `controller.sctx`, as right now KiCoOO doesn't support renaming charts.
+
 ## Current architecture of the model railway
 `RailBlocks -> RailSL -> lean SCCharts -> java -> pyRailwayD -> Arduinos`
