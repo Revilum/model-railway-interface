@@ -16,9 +16,9 @@ scchart interface {
 
     output bool lights[24]
     
-    const int STRAIGHT = 0
-    const int BRANCH = 1
-    output int points[30]
+    const bool STRAIGHT = false
+    const bool BRANCH = true
+    output bool points[30]
 
     // signed byte negative: backwards
     //WARNING: This breaks RailSL probably
