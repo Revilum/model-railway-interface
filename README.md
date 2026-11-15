@@ -23,3 +23,7 @@ You need to reference the chart `charts/interface.sctx`. The chart defines all i
 
 ## Current architecture of the model railway
 `RailBlocks -> RailSL -> lean SCCharts -> java -> pyRailwayD -> Arduinos`
+
+# TODOs:
+- Test everything on the model railway.
+- Verify that the behaviour is exactly as the simulator.

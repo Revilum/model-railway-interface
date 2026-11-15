@@ -1,7 +1,12 @@
 {
     "addresses": {
-        "simulation": [],
-        "railway": [],
-        "testTrack": []
+        "simulation": {
+            "railway": ["localhost:20010", "localhost:20011", "localhost:20012", "localhost:20013"],
+            "testTrack": ["localhost:20014"]
+        },
+        "hardware": {
+            "railway": ["TODO: All of this", "", "", ""],
+            "testTrack": [""]
+        }
     }
 }
