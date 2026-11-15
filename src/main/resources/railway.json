@@ -1,7 +1,6 @@
 [
     {
         "name": "railPi0",
-        "address": "TODO",
         "tracks": [
             "OC_JCT_0",
             "OI_LN_0",
@@ -103,7 +102,58 @@
             "PNT_14"
         ],
         "signals": [
-            "TODO: Why number"
+            {
+                "name": "KH_LN_0",
+                "number": 0
+            },
+            {
+                "name": "KIO_LN_1",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_5",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_4",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_4",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_6",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_5",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_1",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_2",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_3",
+                "number": 1
+            },
+            {
+                "name": "OI_LN_2",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_0",
+                "number": 1
+            },
+            {
+                "name": "OC_LN_4",
+                "number": 1
+            }
         ],
         "lights": [
             "L_6",
@@ -112,6 +162,563 @@
             "L_9",
             "L_10",
             "L_11"
+        ],
+        "gates": [],
+        "bells": []
+    },
+    {
+        "name": "railPi1",
+        "tracks": [
+            "KIO_LN_0",
+            "IO_LN_0",
+            "IO_LN_2",
+            "IC_LN_5",
+            "KH_LN_1",
+            "KH_LN_7",
+            "KH_LN_8",
+            "KH_ST_0",
+            "KH_ST_1",
+            "KH_ST_2",
+            "KH_ST_3",
+            "KH_ST_4"
+        ],
+        "contacts": [
+            {
+                "name": "KIO_LN_0",
+                "number": 1
+            },
+            {
+                "name": "OC_LN_3",
+                "number": 1
+            },
+            {
+                "name": "IO_LN_2",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_8",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_2",
+                "number": 0
+            },
+            {
+                "name": "IO_LN_0",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_1",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_7",
+                "number": 0
+            },
+            {
+                "name": "IC_LN_5",
+                "number": 0
+            },
+            {
+                "name": "OC_LN_0",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_2",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_1",
+                "number": 1
+            },
+            {
+                "name": "IO_LN_2",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_3",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_2",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_5",
+                "number": 0
+            },
+            {
+                "name": "OC_LN_4",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_4",
+                "number": 0
+            },
+            {
+                "name": "IC_LN_1",
+                "number": 1
+            }
+        ],
+        "points": [
+            "PNT_0",
+            "PNT_1",
+            "PNT_2",
+            "PNT_3",
+            "PNT_4"
+        ],
+        "signals": [
+            {
+                "name": "IO_LN_1",
+                "number": 1
+            },
+            {
+                "name": "OC_LN_3",
+                "number": 1
+            },
+            {
+                "name": "KIO_LN_0",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_8",
+                "number": 1
+            },
+            {
+                "name": "IO_LN_2",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_2",
+                "number": 0
+            },
+            {
+                "name": "OC_LN_0",
+                "number": 1
+            },
+            {
+                "name": "KH_LN_7",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_1",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_1",
+                "number": 1
+            },
+            {
+                "name": "IC_LN_1",
+                "number": 1
+            },
+            {
+                "name": "KH_ST_5",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_4",
+                "number": 0
+            },
+            {
+                "name": "KH_ST_3",
+                "number": 0
+            },
+            {
+                "name": "KH_LN_2",
+                "number": 0
+            }
+        ],
+        "lights": [
+            "L_0",
+            "L_2",
+            "L_3",
+            "L_4",
+            "L_5"
+        ],
+        "gates": [],
+        "bells": []
+    },
+    {
+        "name": "railPi2",
+        "tracks": [
+            "IC_ST_1",
+            "IC_ST_2",
+            "IC_ST_3",
+            "OC_LN_2",
+            "OC_LN_3",
+            "IC_LN_2",
+            "IC_LN_3",
+            "KH_LN_2"
+        ],
+        "contacts": [
+            {
+                "number": 0,
+                "name": "IC_ST_2"
+            },
+            {
+                "number": 0,
+                "name": "IC_ST_1"
+            },
+            {
+                "number": 0,
+                "name": "IC_LN_3"
+            },
+            {
+                "number": 0,
+                "name": "OC_LN_3"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_2"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_8"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_7"
+            },
+            {
+                "number": 1,
+                "name": "IO_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "Gate_1"
+            },
+            {
+                "number": 0,
+                "name": "KIO_LN_0"
+            },
+            {
+                "number": 0,
+                "name": "Gate_0"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_5"
+            },
+            {
+                "number": 0,
+                "name": "IO_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "OC_LN_0"
+            },
+            {
+                "number": 1,
+                "name": "IO_LN_0"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_1"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_2"
+            },
+            {
+                "number": 0,
+                "name": "IC_ST_3"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_2"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_3"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_2"
+            }
+        ],
+        "points": [
+            "PNT_15",
+            "PNT_16",
+            "PNT_17",
+            "PNT_18",
+            "PNT_19",
+            "PNT_20",
+            "PNT_21",
+            "PNT_22"
+        ],
+        "signals": [
+            {
+                "number": 0,
+                "name": "KH_LN_8"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_3"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_7"
+            },
+            {
+                "number": 0,
+                "name": "KIO_LN_0"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_5"
+            },
+            {
+                "number": 0,
+                "name": "Gate_1"
+            },
+            {
+                "number": 1,
+                "name": "IO_LN_0"
+            },
+            {
+                "number": 0,
+                "name": "Gate_0"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_2"
+            },
+            {
+                "number": 1,
+                "name": "OC_ST_1"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_2"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_2"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_2"
+            }
+        ],
+        "lights": [
+            "L_17",
+            "L_18",
+            "L_19",
+            "L_20",
+            "L_21",
+            "L_22",
+            "L_23"
+        ],
+        "gates": [
+            "Gate_0",
+            "Gate_1"
+        ],
+        "bells": [
+            "Bell_0"
         ]
+    },
+    {
+        "name": "railPi3",
+        "tracks": [
+            "IC_LN_0",
+            "IC_ST_4",
+            "OC_ST_0",
+            "OC_ST_1",
+            "OC_ST_2",
+            "OC_ST_3",
+            "OC_LN_5",
+            "KIO_LN_1",
+            "KH_LN_0",
+            "KH_LN_3",
+            "KH_LN_4",
+            "OI_LN_1"
+        ],
+        "contacts": [
+            {
+                "number": 0,
+                "name": "IC_LN_4"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_1"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_3"
+            },
+            {
+                "number": 1,
+                "name": "KIO_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "IC_LN_0"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_5"
+            },
+            {
+                "number": 0,
+                "name": "OI_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_5"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_3"
+            },
+            {
+                "number": 1,
+                "name": "OI_LN_1"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_2"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_1"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_6"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_3"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_4"
+            },
+            {
+                "number": 0,
+                "name": "OC_ST_2"
+            },
+            {
+                "number": 0,
+                "name": "OI_LN_2"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_4"
+            },
+            {
+                "number": 0,
+                "name": "OC_ST_3"
+            },
+            {
+                "number": 0,
+                "name": "OC_ST_1"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_3"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_0"
+            },
+            {
+                "number": 0,
+                "name": "OC_LN_2"
+            }
+        ],
+        "points": [
+            "PNT_23",
+            "PNT_24",
+            "PNT_25",
+            "PNT_26",
+            "PNT_27",
+            "PNT_28",
+            "PNT_29"
+        ],
+        "signals": [
+            {
+                "number": 1,
+                "name": "KH_LN_4"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_5"
+            },
+            {
+                "number": 1,
+                "name": "KIO_LN_1"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_3"
+            },
+            {
+                "number": 1,
+                "name": "OI_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_5"
+            },
+            {
+                "number": 1,
+                "name": "OC_LN_1"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_3"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_1"
+            },
+            {
+                "number": 1,
+                "name": "IC_LN_3"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_4"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_2"
+            },
+            {
+                "number": 0,
+                "name": "KH_LN_6"
+            },
+            {
+                "number": 1,
+                "name": "OI_LN_1"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_3"
+            },
+            {
+                "number": 1,
+                "name": "KH_LN_0"
+            },
+            {
+                "number": 1,
+                "name": "IC_ST_1"
+            }
+        ],
+        "lights": [
+            "L_12",
+            "L_13",
+            "L_14",
+            "L_15",
+            "L_16"
+        ],
+        "gates": [],
+        "bells": []
     }
 ]
