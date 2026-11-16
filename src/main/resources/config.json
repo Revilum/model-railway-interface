@@ -5,8 +5,8 @@
             "testTrack": ["tcp://localhost:20014"]
         },
         "hardware": {
-            "railway": ["tcp://railPi0:10000", "tcp://railPi1:10000", "tcp://railPi2:10000", "tcp://railPi3:10000"],
-            "testTrack": ["tcp://railPi4:10000"]
+            "railway": ["tcp://railway.rtsys.informatik.uni-kiel.de:20010", "tcp://railway.rtsys.informatik.uni-kiel.de:20011", "tcp://railway.rtsys.informatik.uni-kiel.de:20012", "tcp://railway.rtsys.informatik.uni-kiel.de:20013"],
+            "testTrack": ["tcp://railway.rtsys.informatik.uni-kiel.de:20014"]
         }
     }
 }

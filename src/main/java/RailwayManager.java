@@ -53,8 +53,12 @@ public class RailwayManager {
                 sigs[cSig.number] = i;
                 this.signalMap.put(cSig.name, sigs);
             }
+        }
+    }
 
-            socketClients[i].send(new ConnectRequest(), true);
+    public void connect() throws IOException {
+        for (SocketClient client : this.socketClients) {
+            client.send(new ConnectRequest(), true);
         }
     }
 
@@ -92,6 +96,21 @@ public class RailwayManager {
         }
 
         this.builders[i.intValue()].addBell(id, on);
+    }
+
+    public void resetRailway() throws NameNotFoundException {
+        for (String pointId : this.pointMap.keySet()) {
+            setPoint(pointId, false);
+        }
+
+        for (String trackId : this.trackMap.keySet()) {
+            setTrack(trackId, 0, 0);
+        }
+
+        for (String signalId : this.signalMap.keySet()) {
+            setSignal(signalId, 0, new boolean[]{false, false, false});
+            setSignal(signalId, 1, new boolean[]{false, false, false});
+        }
     }
 
     public void setSignal(String trackId, int index, boolean[] color) throws NameNotFoundException {

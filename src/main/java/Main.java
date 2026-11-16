@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     static void main() throws Exception {
-        RailwayManager railwayManager = new RailwayManager(Config.getConfig().addresses.simulation.railway);
+        RailwayManager railwayManager = new RailwayManager(Config.getConfig().addresses.hardware.railway);
 
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -37,7 +37,15 @@ public class Main {
                         railwayManager.setTrack(inputParts[1], Integer.parseInt(inputParts[2]),
                                 Integer.parseInt(inputParts[3]));
                         break;
+                    case "setsignal":
+                        boolean[] color = {inputParts[3].toLowerCase().equals("true"), inputParts[4].toLowerCase().equals("true"), inputParts[5].toLowerCase().equals("true")};
+                        railwayManager.setSignal(inputParts[1], Integer.parseInt(inputParts[2]), color);
+                        break;
                     case "send":
+                        railwayManager.setRailway(true);
+                        break;
+                    case "reset":
+                        railwayManager.resetRailway();
                         railwayManager.setRailway(true);
                         break;
                     case "disconnect":
@@ -47,6 +55,9 @@ public class Main {
                         exit = true;
                         railwayManager.disconnect(true, true);
                         scanner.close();
+                        break;
+                    case "connect":
+                        railwayManager.connect();
                         break;
                     default:
                         System.out.println("WARNING! Command not found!");
