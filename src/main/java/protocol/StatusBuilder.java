@@ -27,8 +27,9 @@ public class StatusBuilder {
         this.points.add(new Point(id, on ? 1 : 0));
     }
 
-    public void addSignal(String trackId, int index, int color) {
-        this.signals.add(new Signal(trackId, index, color));
+    public void addSignal(String trackId, int index, boolean[] color) {
+        int bitcolor = (color[0] ? 1 : 0) | (color[1] ? 2 : 0) | (color[2] ? 4 : 0);
+        this.signals.add(new Signal(trackId, index, bitcolor));
     }
 
     public void addTrack(String id, int direction, int speed) {

@@ -93,7 +93,7 @@ public class RailwayManager {
         this.builders[i].addBell(id, on);
     }
 
-    public void setSignal(String trackId, int index, int color) throws NameNotFoundException {
+    public void setSignal(String trackId, int index, boolean[] color) throws NameNotFoundException {
         Integer[] sigs = this.signalMap.get(trackId);
         if (sigs == null || sigs[index] == null) {
             throw new NameNotFoundException("signal not found on railway");
