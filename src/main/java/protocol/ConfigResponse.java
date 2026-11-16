@@ -2,9 +2,8 @@ package protocol;
 
 import obj.ConfigContact;
 import obj.ConfigSignal;
-import obj.Deserializable;
 
-public class ConfigResponse extends ConfigRequest implements Deserializable {
+public class ConfigResponse extends ConfigRequest {
     public final ConfigContact[] contacts;
     public final ConfigSignal[] signals;
     public final String[] tracks;
@@ -17,7 +16,6 @@ public class ConfigResponse extends ConfigRequest implements Deserializable {
         this.signals = signals;
         this.tracks = tracks;
         this.points = points;
-        ConfigResponse.fromJsonPath("", this.getClass());
     }
     
 }
