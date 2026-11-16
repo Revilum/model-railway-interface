@@ -7,13 +7,19 @@ import javax.naming.NameNotFoundException;
 
 import protocol.ConfigRequest;
 import protocol.ConfigResponse;
+import protocol.ConnectRequest;
+import protocol.ContactsRequest;
+import protocol.ContactsResponse;
+import protocol.Deserializer;
+import protocol.DisconnectRequest;
+import protocol.ShutdownRequest;
 import protocol.StatusBuilder;
 import socket.SocketClient;
 import socket.TcpClient;
 import obj.ConfigSignal;
-import obj.Deserializable;
+import obj.Contact;
 
-public class RailwayStateUpdater {
+public class RailwayManager {
     private final StatusBuilder[] builders;
     private final HashMap<String, Integer> pointMap = new HashMap<>();
     // since the socket protol thinks points, lights, gates and bells are the same, I'm gonna be lazy and also mix them together for the railway object to rpi mapping.
@@ -24,15 +30,15 @@ public class RailwayStateUpdater {
     private final HashMap<String, Integer[]> signalMap = new HashMap<>();
     private final SocketClient[] socketClients;
 
-    public RailwayStateUpdater(String[] addresses) throws UnknownHostException, IOException, URISyntaxException {
+    public RailwayManager(String[] addresses) throws UnknownHostException, IOException, URISyntaxException {
         this.builders = new StatusBuilder[addresses.length];
         socketClients = new SocketClient[addresses.length];
 
         // create mapping which track, point, etc. is connected to which rpi.
         for (int i = 0; i < addresses.length; ++i) {
             socketClients[i] = new TcpClient(addresses[i]);
-            String res = socketClients[i].request((new ConfigRequest()).toJson());
-            ConfigResponse confRes = Deserializable.fromJson(res, ConfigResponse.class);
+            socketClients[i].send(new ConnectRequest(), true);
+            ConfigResponse confRes = socketClients[i].request(new ConfigRequest());
 
             for (int j = 0; j < confRes.points.length; ++j) {
                 this.pointMap.put(confRes.points[j], j);
@@ -106,11 +112,41 @@ public class RailwayStateUpdater {
         this.builders[i].addTrack(id, direction, speed);
     }
 
-    public void sendStatus(boolean blocking) throws IOException {
+    public void setRailway(boolean blocking) throws IOException {
         for (int i = 0; i < this.builders.length; ++i) {
-            String json = this.builders[i].toStatusRequest().toJson();
-            this.socketClients[i].send(json, blocking);
-            this.builders[i].clear();
+            this.socketClients[i].send(this.builders[i].toStatusRequest(), blocking);
         } 
+    }
+
+    public void disconnect(boolean blocking, boolean closeSockets) throws IOException {
+        for (SocketClient socket : this.socketClients) {
+            socket.send(new DisconnectRequest(), blocking);
+            if (closeSockets) {
+                socket.close();
+            }
+        }
+    }
+
+    // WARNING: Use with caution
+    public void shutdown(boolean blocking) throws IOException {
+        for (SocketClient socket : this.socketClients) {
+            socket.send(new ShutdownRequest(), blocking);
+            socket.close();
+        }
+    }
+
+    public HashMap<String, Integer[]> requestContacts() throws IOException {
+        HashMap<String, Integer[]> result = new HashMap<>();
+        for (SocketClient socket : this.socketClients) {
+            ContactsResponse res = socket.request(new ContactsRequest());
+
+            for (Contact contact : res.contacts) {
+                Integer[] segment = result.getOrDefault(contact.name, new Integer[]{null, null});
+                segment[contact.number] = contact.count;
+                result.put(contact.name, segment);
+            }
+        }
+
+        return result;
     }
 }

@@ -1,4 +1,4 @@
-package obj;
+package protocol;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -6,8 +6,10 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import obj.Config;
 
-public class Deserializable {
+
+public class Deserializer {
 
     public static <T> T fromJsonPath(String jsonPath, Class<T> type) {
         InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(
@@ -15,17 +17,17 @@ public class Deserializable {
                 jsonPath + " not found"),
                 StandardCharsets.UTF_8);
 
-        return Deserializable.fromJson(reader, type);
+        return Deserializer.fromJson(reader, type);
     }
 
     public static <T> T fromJson(String json, Class<T> type) {
         StringReader reader = new StringReader(json);
-        return Deserializable.fromJson(reader, type);
+        return Deserializer.fromJson(reader, type);
     }
 
     public static <T> T fromJson(Reader json, Class<T> type) {
         return Config.getConfig().gson.fromJson(json, type);
     }
 
-    private Deserializable() {};
+    protected Deserializer() {};
 }

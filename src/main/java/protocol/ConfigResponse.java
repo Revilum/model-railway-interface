@@ -2,7 +2,6 @@ package protocol;
 
 import obj.ConfigContact;
 import obj.ConfigSignal;
-import obj.Deserializable;
 
 public class ConfigResponse extends ConfigRequest {
     public final ConfigContact[] contacts;
