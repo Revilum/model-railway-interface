@@ -1,12 +1,12 @@
 {
     "addresses": {
         "simulation": {
-            "railway": ["localhost:20010", "localhost:20011", "localhost:20012", "localhost:20013"],
-            "testTrack": ["localhost:20014"]
+            "railway": ["tcp://localhost:20010", "tcp://localhost:20011", "tcp://localhost:20012", "tcp://localhost:20013"],
+            "testTrack": ["tcp://localhost:20014"]
         },
         "hardware": {
-            "railway": ["railPi0:10000", "railPi1:10000", "railPi2:10000", "railPi3:10000"],
-            "testTrack": ["railPi4:10000"]
+            "railway": ["tcp://railPi0:10000", "tcp://railPi1:10000", "tcp://railPi2:10000", "tcp://railPi3:10000"],
+            "testTrack": ["tcp://railPi4:10000"]
         }
     }
 }

@@ -1,13 +1,12 @@
 package protocol;
 
+import com.google.gson.Gson;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-
-import obj.Config;
-
 
 public class Deserializer {
 
@@ -26,7 +25,7 @@ public class Deserializer {
     }
 
     public static <T> T fromJson(Reader json, Class<T> type) {
-        return Config.getConfig().gson.fromJson(json, type);
+        return new Gson().fromJson(json, type);
     }
 
     protected Deserializer() {};

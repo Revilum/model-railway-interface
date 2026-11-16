@@ -35,25 +35,26 @@ public class RailwayManager {
 
         // create mapping which track, point, etc. is connected to which rpi.
         for (int i = 0; i < addresses.length; ++i) {
+            this.builders[i] = new StatusBuilder();
             socketClients[i] = new TcpClient(addresses[i]);
-            socketClients[i].send(new ConnectRequest(), true);
-            ConfigResponse confRes = socketClients[i].request(new ConfigRequest());
+            ConfigResponse confRes = socketClients[i].request(new ConfigRequest(), ConfigResponse.class);
 
-            for (int j = 0; j < confRes.points.length; ++j) {
-                this.pointMap.put(confRes.points[j], j);
+            for (String pointId : confRes.points) {
+                this.pointMap.put(pointId, i);
             }
 
-            for (int j = 0; j < confRes.tracks.length; ++j) {
-                this.trackMap.put(confRes.tracks[j], j);
+            for (String trackId : confRes.tracks) {
+                this.trackMap.put(trackId, i);
             }
 
-            for (int j = 0; j < confRes.signals.length; ++j) {
-                ConfigSignal cSig = confRes.signals[j];
+            for (ConfigSignal cSig : confRes.signals) {
                 Integer[] sigs = this.signalMap.getOrDefault(cSig.name, new Integer[]{null, null});
 
-                sigs[cSig.number] = j;
+                sigs[cSig.number] = i;
                 this.signalMap.put(cSig.name, sigs);
             }
+
+            socketClients[i].send(new ConnectRequest(), true);
         }
     }
 
@@ -63,7 +64,7 @@ public class RailwayManager {
             throw new NameNotFoundException("point not found on railway");
         }
 
-        this.builders[i].addPoint(id, branching);
+        this.builders[i.intValue()].addPoint(id, branching);
     }
 
     public void setLight(String id, boolean on) throws NameNotFoundException {
@@ -71,8 +72,8 @@ public class RailwayManager {
         if (i == null) {
             throw new NameNotFoundException("light not found on railway");
         }
-
-        this.builders[i].addLight(id, on);
+        int buf = i.intValue();
+        this.builders[buf].addLight(id, on);
     }
 
     public void setGate(String id, boolean down) throws NameNotFoundException {
@@ -81,7 +82,7 @@ public class RailwayManager {
             throw new NameNotFoundException("gate not found on railway");
         }
 
-        this.builders[i].addGate(id, down);
+        this.builders[i.intValue()].addGate(id, down);
     }
 
     public void setBell(String id, boolean on) throws NameNotFoundException {
@@ -90,7 +91,7 @@ public class RailwayManager {
             throw new NameNotFoundException("bell not found on railway");
         }
 
-        this.builders[i].addBell(id, on);
+        this.builders[i.intValue()].addBell(id, on);
     }
 
     public void setSignal(String trackId, int index, boolean[] color) throws NameNotFoundException {
@@ -99,7 +100,7 @@ public class RailwayManager {
             throw new NameNotFoundException("signal not found on railway");
         }
 
-        this.builders[sigs[index]].addSignal(trackId, index, color);
+        this.builders[sigs[index].intValue()].addSignal(trackId, index, color);
     }
 
     public void setTrack(String id, int direction, int speed) throws NameNotFoundException {
@@ -108,7 +109,7 @@ public class RailwayManager {
             throw new NameNotFoundException("gate not found on railway");
         }
 
-        this.builders[i].addTrack(id, direction, speed);
+        this.builders[i.intValue()].addTrack(id, direction, speed);
     }
 
     public void setRailway(boolean blocking) throws IOException {
@@ -127,6 +128,12 @@ public class RailwayManager {
         }
     }
 
+    public void closeSockets() throws IOException {
+        for (SocketClient socket : this.socketClients) {
+            socket.close();
+        }
+    }
+
     // WARNING: Use with caution
     public void shutdown(boolean blocking) throws IOException {
         for (SocketClient socket : this.socketClients) {
@@ -138,7 +145,7 @@ public class RailwayManager {
     public HashMap<String, Integer[]> requestContacts() throws IOException {
         HashMap<String, Integer[]> result = new HashMap<>();
         for (SocketClient socket : this.socketClients) {
-            ContactsResponse res = socket.request(new ContactsRequest());
+            ContactsResponse res = socket.request(new ContactsRequest(), ContactsResponse.class);
 
             for (Contact contact : res.contacts) {
                 Integer[] segment = result.getOrDefault(contact.name, new Integer[]{null, null});
