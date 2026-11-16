@@ -114,6 +114,7 @@ public class RailwayManager {
     public void setRailway(boolean blocking) throws IOException {
         for (int i = 0; i < this.builders.length; ++i) {
             this.socketClients[i].send(this.builders[i].toStatusRequest(), blocking);
+            this.builders[i].clear();
         } 
     }
 
