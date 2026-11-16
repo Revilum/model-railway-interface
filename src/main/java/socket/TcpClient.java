@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.reflect.TypeToken;
 
 import obj.Config;
-import protocol.DisconnectRequest;
 import protocol.Request;
 
 public class TcpClient implements SocketClient {

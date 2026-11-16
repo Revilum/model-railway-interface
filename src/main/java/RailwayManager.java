@@ -10,7 +10,6 @@ import protocol.ConfigResponse;
 import protocol.ConnectRequest;
 import protocol.ContactsRequest;
 import protocol.ContactsResponse;
-import protocol.Deserializer;
 import protocol.DisconnectRequest;
 import protocol.ShutdownRequest;
 import protocol.StatusBuilder;
