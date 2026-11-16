@@ -19,11 +19,11 @@ public class StatusBuilder {
         this.points.add(new Point(id, on ? 1 : 0));
     }
 
-    public void setGate(String id, boolean down) {
+    public void addGate(String id, boolean down) {
         this.points.add(new Point(id, down ? 1 : 0));
     }
 
-    public void setBell(String id, boolean on) {
+    public void addBell(String id, boolean on) {
         this.points.add(new Point(id, on ? 1 : 0));
     }
 
