@@ -1,5 +1,7 @@
 package obj;
 
+import com.google.gson.Gson;
+
 class Addresses {
     public final Hostnames simulation;
     public final Hostnames hardware;
@@ -22,7 +24,8 @@ class Hostnames {
 
 public class Config extends Deserializable {
     public final Addresses addresses;
-    private static final Config INSTANCE = loadJson(Config.class, "/config.json");
+    private static final Config INSTANCE = Config.fromJsonPath("/config.json", Config.class);
+    public final Gson gson = new Gson();
 
     private Config() {
         addresses = null;
