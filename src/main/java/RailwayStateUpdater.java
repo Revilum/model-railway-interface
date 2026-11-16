@@ -110,6 +110,7 @@ public class RailwayStateUpdater {
         for (int i = 0; i < this.builders.length; ++i) {
             String json = this.builders[i].toStatusRequest().toJson();
             this.socketClients[i].send(json, blocking);
+            this.builders[i].clear();
         } 
     }
 }
