@@ -2,9 +2,11 @@ package socket;
 
 import java.io.IOException;
 
+import protocol.Request;
+
 public interface SocketClient {
-    void disconnect() throws IOException;
-    void send(String msg, boolean blocking) throws IOException;
-    String receive(boolean blocking) throws IOException;
-    String request(String msg) throws IOException;
+    void close() throws IOException;
+    void send(Request req, boolean blocking) throws IOException;
+    <T extends Request> T receive(boolean blocking) throws IOException;
+    <T extends Request> T request(Request req) throws IOException;
 }

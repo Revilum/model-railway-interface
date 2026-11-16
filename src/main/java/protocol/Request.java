@@ -2,7 +2,7 @@ package protocol;
 import com.google.gson.Gson;
 
 
-public abstract class Request {
+public abstract class Request extends Deserializer {
     public final String command;
     private static Gson gson = new Gson();
 

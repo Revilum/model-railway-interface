@@ -11,7 +11,10 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
-import protocol.DisconnectRequest;
+import com.google.gson.reflect.TypeToken;
+
+import obj.Config;
+import protocol.Request;
 
 public class TcpClient implements SocketClient {
     private final Socket socket;
@@ -28,16 +31,14 @@ public class TcpClient implements SocketClient {
     }
 
     @Override
-    public void disconnect() throws IOException {
-        //not sure if we should send the disconnect request here or we do that at a higher abstraction level.
-        this.send((new DisconnectRequest()).toJson(), true);
+    public void close() throws IOException {
         this.in.close();
         this.out.close();
     }
 
     @Override
-    public void send(String msg, boolean blocking) throws IOException {
-        this.out.write(msg);
+    public void send(Request req, boolean blocking) throws IOException {
+        this.out.write(req.toJson());
         this.out.newLine();
         if (blocking) {
             this.out.flush();
@@ -45,16 +46,17 @@ public class TcpClient implements SocketClient {
     }
 
     @Override
-    public String receive(boolean blocking) throws IOException {
+    public <T extends Request> T receive(boolean blocking) throws IOException {
         if (!blocking && !this.in.ready()) {
             return null;
         }
-        return this.in.readLine();
+
+        return Config.getConfig().gson.fromJson(this.in.readLine(), new TypeToken<T>() { });
     }
 
     @Override
-    public String request(String msg) throws IOException {
-        this.send(msg, true);
+    public <T extends Request> T request(Request req) throws IOException {
+        this.send(req, true);
         return this.receive(true);
     }
 }

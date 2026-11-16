@@ -5,8 +5,8 @@
             "testTrack": ["localhost:20014"]
         },
         "hardware": {
-            "railway": ["TODO: All of this", "", "", ""],
-            "testTrack": [""]
+            "railway": ["railPi0:10000", "railPi1:10000", "railPi2:10000", "railPi3:10000"],
+            "testTrack": ["railPi4:10000"]
         }
     }
 }
