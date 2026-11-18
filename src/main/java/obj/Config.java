@@ -14,7 +14,7 @@ public class Config {
     private Config() {
         addresses = null;
         tracks = null;
-        sleep = 0;
+        sleepMs = 0;
     }
 
     public static Config getConfig() {
