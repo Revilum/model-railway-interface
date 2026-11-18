@@ -81,12 +81,11 @@ public class Main {
                 }
 
             } catch (Exception e) {
-                System.err.println("FATAL ERROR HAPPEND STOPPING ALL TRAINS!");
                 System.err.println(e);
-                manager.resetRailway();
-                manager.setRailway(true);
             }
+
         }
 
+        // scanner.close(); //just do this at the very end of the program
     }
 }
