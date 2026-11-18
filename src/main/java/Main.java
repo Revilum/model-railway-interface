@@ -1,91 +1,99 @@
 import obj.Config;
 import obj.Contact;
 
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
+import kieler_gen.Interface;
 
 public class Main {
     static void main() throws Exception {
-        RailwayManager railwayManager = new RailwayManager(Config.getConfig().addresses.hardware.railway);
+        Config conf = Config.getConfig();
+        Interface controller = new Interface(false);
+        RailwayManager railwayManager = new RailwayManager(conf.addresses.simulation.railway);
 
-        Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
-        while (!exit) {
+        HashMap<String, Integer> trackToIndexMap = new HashMap<>();
+        for (int i = 0; i < conf.tracks.length; ++i) {
+            trackToIndexMap.putIfAbsent(conf.tracks[i], i);
+        }
+
+        boolean[][][] oldSignals = controller.signals;
+        boolean[] oldPoints = controller.points;
+        boolean[] oldLights = controller.lights;
+        int[] oldTrackSpeeds = controller.trackSpeeds;
+        boolean oldOpenGate = controller.openGate;
+
+        // old* vars and controller should not have the same refernce to the same output
+        // arrays.
+        controller.localReset();
+
+        while (!controller.isFinal()) {
             try {
+                for (Map.Entry<String, Contact[]> entry : railwayManager.requestContacts().entrySet()) {
+                    int trackI = trackToIndexMap.get(entry.getKey());
+                    Contact[] contacts = entry.getValue();
 
-                System.out.print("> ");
-                String input = scanner.nextLine();
-                String[] inputParts = input.split(" ");
-
-                if (inputParts.length == 0) {
-                    continue;
-                }
-
-                String command = inputParts[0].toLowerCase();
-                switch (command) {
-                    case "setpoint":
-                        railwayManager.setPoint(inputParts[1], inputParts[2].toLowerCase().equals("true"));
-                        break;
-                    case "setlight":
-                        railwayManager.setLight(inputParts[1], inputParts[2].toLowerCase().equals("true"));
-                        break;
-                    case "setgate":
-                        railwayManager.setGate(inputParts[1], inputParts[2].toLowerCase().equals("true"));
-                        break;
-                    case "setbell":
-                        railwayManager.setBell(inputParts[1], inputParts[2].toLowerCase().equals("true"));
-                        break;
-                    case "settrack":
-                        railwayManager.setTrack(inputParts[1], Integer.parseInt(inputParts[2]),
-                                Integer.parseInt(inputParts[3]));
-                        break;
-                    case "setsignal":
-                        boolean[] color = {inputParts[3].toLowerCase().equals("true"), inputParts[4].toLowerCase().equals("true"), inputParts[5].toLowerCase().equals("true")};
-                        railwayManager.setSignal(inputParts[1], Integer.parseInt(inputParts[2]), color);
-                        break;
-                    case "send":
-                        railwayManager.setRailway(true);
-                        break;
-                    case "getcontacts":
-                        HashMap<String, Contact[]> contactsMap = railwayManager.requestContacts();
-                        for (Contact[] contacts : contactsMap.values()) {
-                            for (Contact contact : contacts) {
-                                if (contact != null) {
-                                    System.out.println(contact.toString());
-                                }
-                            }
+                    for (Contact contact : contacts) {
+                        if (contact != null) {
+                            controller.contacts[trackI][contact.number][0] = contact.type;
+                            controller.contacts[trackI][contact.number][0] = contact.count;
                         }
-                        break;
-                    case "reset":
-                        railwayManager.resetRailway();
-                        railwayManager.setRailway(true);
-                        break;
-                    case "disconnect":
-                        railwayManager.disconnect(true, false);
-                        break;
-                    case "exit":
-                        exit = true;
-                        railwayManager.disconnect(true, true);
-                        scanner.close();
-                        break;
-                    case "connect":
-                        railwayManager.connect();
-                        break;
-                    case "shutdown":
-                        railwayManager.shutdown(false);
-                        break;
-                    default:
-                        System.out.println("WARNING! Command not found!");
-                        break;
+                    }
                 }
+
+                controller.tick();
+
+                for (int i = 0; i < controller.points.length; ++i) {
+                    if (controller.points[i] != oldPoints[i]) {
+                        railwayManager.setPoint("P_" + i, controller.points[i]);
+                    }
+                }
+                oldPoints = controller.points;
+
+                for (int i = 0; i < controller.lights.length; ++i) {
+                    if (controller.lights[i] != oldLights[i]) {
+                        railwayManager.setPoint("L_" + i, controller.lights[i]);
+                    }
+                }
+                oldLights = controller.lights;
+
+                for (int i = 0; i < controller.trackSpeeds.length; ++i) {
+                    int speed = controller.trackSpeeds[i];
+                    if (speed != oldTrackSpeeds[i]) {
+                        railwayManager.setTrack(conf.tracks[i], speed == 0 ? 0 : speed > 0 ? 1 : 2, speed);
+                    }
+                }
+                oldTrackSpeeds = controller.trackSpeeds;
+
+                for (int i = 0; i < controller.signals.length; ++i) {
+                    boolean[][] trackSignals = controller.signals[i];
+                    for (int j = 0; j < trackSignals.length; ++j) {
+                        if (trackSignals[j] != null) {
+                            railwayManager.setSignal(conf.tracks[i], j, trackSignals[j]);
+                        }
+                    }
+                    oldSignals = controller.signals;
+
+                    if (controller.openGate != oldOpenGate) {
+                        railwayManager.setBell("Bell_0", controller.openGate);
+                        railwayManager.setGate("Gate_0", controller.openGate);
+                        railwayManager.setGate("Gate_1", controller.openGate);
+                    }
+                    oldOpenGate = controller.openGate;
+
+                }
+
+                Thread.sleep(conf.sleepMs);
 
             } catch (Exception e) {
+                System.err.println("FATAL ERROR: STOPPING RAILWAY");
                 System.err.println(e);
+                railwayManager.resetRailway();
+                railwayManager.setRailway(true);
             }
 
         }
-
-        // scanner.close(); //just do this at the very end of the program
     }
 }

@@ -23,7 +23,7 @@
             ]
         }
     },
-    "sleep": 10,
+    "sleepMs": 50,
     "tracks": [
         "KH_ST_0",
         "KH_ST_1",
