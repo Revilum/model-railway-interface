@@ -1,4 +1,7 @@
 import obj.Config;
+import obj.Contact;
+
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -44,6 +47,16 @@ public class Main {
                     case "send":
                         railwayManager.setRailway(true);
                         break;
+                    case "getcontacts":
+                        HashMap<String, Contact[]> contactsMap = railwayManager.requestContacts();
+                        for (Contact[] contacts : contactsMap.values()) {
+                            for (Contact contact : contacts) {
+                                if (contact != null) {
+                                    System.out.println(contact.toString());
+                                }
+                            }
+                        }
+                        break;
                     case "reset":
                         railwayManager.resetRailway();
                         railwayManager.setRailway(true);
@@ -58,6 +71,9 @@ public class Main {
                         break;
                     case "connect":
                         railwayManager.connect();
+                        break;
+                    case "shutdown":
+                        railwayManager.shutdown(false);
                         break;
                     default:
                         System.out.println("WARNING! Command not found!");

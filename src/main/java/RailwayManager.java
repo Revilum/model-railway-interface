@@ -108,18 +108,22 @@ public class RailwayManager {
         }
 
         for (String signalId : this.signalMap.keySet()) {
-            setSignal(signalId, 0, new boolean[]{false, false, false});
-            setSignal(signalId, 1, new boolean[]{false, false, false});
+            Integer[] signals = this.signalMap.get(signalId);
+            for (int i = 0; i < signals.length; ++i) {
+                if (signals[i] != null) {
+                    setSignal(signalId, i, new boolean[]{false, false, false});
+                }
+            }
         }
     }
 
-    public void setSignal(String trackId, int index, boolean[] color) throws NameNotFoundException {
-        Integer[] sigs = this.signalMap.get(trackId);
+    public void setSignal(String signalId, int index, boolean[] color) throws NameNotFoundException {
+        Integer[] sigs = this.signalMap.get(signalId);
         if (sigs == null || sigs[index] == null) {
-            throw new NameNotFoundException("signal not found on railway");
+            throw new NameNotFoundException("signal " + signalId + " not found on railway");
         }
 
-        this.builders[sigs[index].intValue()].addSignal(trackId, index, color);
+        this.builders[sigs[index].intValue()].addSignal(signalId, index, color);
     }
 
     public void setTrack(String id, int direction, int speed) throws NameNotFoundException {
@@ -161,15 +165,15 @@ public class RailwayManager {
         }
     }
 
-    public HashMap<String, Integer[]> requestContacts() throws IOException {
-        HashMap<String, Integer[]> result = new HashMap<>();
+    public HashMap<String, Contact[]> requestContacts() throws IOException {
+        HashMap<String, Contact[]> result = new HashMap<>();
         for (SocketClient socket : this.socketClients) {
             ContactsResponse res = socket.request(new ContactsRequest(), ContactsResponse.class);
 
             for (Contact contact : res.contacts) {
-                Integer[] segment = result.getOrDefault(contact.name, new Integer[]{null, null});
-                segment[contact.number] = contact.count;
-                result.put(contact.name, segment);
+                Contact[] contacts = result.getOrDefault(contact.name, new Contact[]{null, null});
+                contacts[contact.number] = contact;
+                result.put(contact.name, contacts);
             }
         }
 
