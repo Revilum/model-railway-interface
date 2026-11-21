@@ -15,33 +15,37 @@ public class Main {
         Config conf = Config.getConfig();
         Interface controller = new Interface(false);
         RailwayManager railwayManager = new RailwayManager(conf.addresses.simulation.railway);
+        railwayManager.connect();
 
         HashMap<String, Integer> trackToIndexMap = new HashMap<>();
         for (int i = 0; i < conf.tracks.length; ++i) {
             trackToIndexMap.putIfAbsent(conf.tracks[i], i);
         }
 
-        boolean[][][] oldSignals = controller.signals;
-        boolean[] oldPoints = controller.points;
-        boolean[] oldLights = controller.lights;
-        int[] oldTrackSpeeds = controller.trackSpeeds;
-        boolean oldOpenGate = controller.openGate;
-
-        // old* vars and controller should not have the same refernce to the same output
-        // arrays.
+        // old* vars and controller should not have the same reference to the same output arrays.
         controller.localReset();
+
+        boolean[][][] oldSignals = controller.signals.clone(); //TODO: not working
+        boolean[] oldPoints = controller.points.clone();
+        boolean[] oldLights = controller.lights.clone();
+        int[] oldTrackSpeeds = controller.trackSpeeds.clone();
+        boolean oldOpenGate = controller.openGate;
 
         while (!controller.isFinal()) {
             try {
                 // request new contact data for controller input
                 for (Map.Entry<String, Contact[]> entry : railwayManager.requestContacts().entrySet()) {
-                    int trackI = trackToIndexMap.get(entry.getKey());
+                    Integer trackIndex = trackToIndexMap.get(entry.getKey());
+                    if (trackIndex == null) {
+                        continue;
+                    }
+                    int trackI = trackIndex;
                     Contact[] contacts = entry.getValue();
 
                     for (Contact contact : contacts) {
                         if (contact != null) {
                             controller.contacts[trackI][contact.number][0] = contact.type;
-                            controller.contacts[trackI][contact.number][0] = contact.count;
+                            controller.contacts[trackI][contact.number][1] = contact.count;
                         }
                     }
                 }
@@ -52,17 +56,17 @@ public class Main {
                 // store old output so we can only send the changes to the rpies.
                 for (int i = 0; i < controller.points.length; ++i) {
                     if (controller.points[i] != oldPoints[i]) {
-                        railwayManager.setPoint("P_" + i, controller.points[i]);
+                        railwayManager.setPoint("PNT_" + i, controller.points[i]);
                     }
                 }
-                oldPoints = controller.points;
+                oldPoints = controller.points.clone();
 
                 for (int i = 0; i < controller.lights.length; ++i) {
                     if (controller.lights[i] != oldLights[i]) {
-                        railwayManager.setPoint("L_" + i, controller.lights[i]);
+                        railwayManager.setLight("L_" + i, controller.lights[i]);
                     }
                 }
-                oldLights = controller.lights;
+                oldLights = controller.lights.clone();
 
                 for (int i = 0; i < controller.trackSpeeds.length; ++i) {
                     int speed = controller.trackSpeeds[i];
@@ -70,7 +74,7 @@ public class Main {
                         railwayManager.setTrack(conf.tracks[i], speed == 0 ? 0 : speed > 0 ? 1 : 2, speed);
                     }
                 }
-                oldTrackSpeeds = controller.trackSpeeds;
+                oldTrackSpeeds = controller.trackSpeeds.clone();
 
                 for (int i = 0; i < controller.signals.length; ++i) {
                     boolean[][] trackSignals = controller.signals[i];
@@ -81,7 +85,7 @@ public class Main {
                         }
                     }
                 }
-                oldSignals = controller.signals;
+                oldSignals = controller.signals.clone();
 
                 if (controller.openGate != oldOpenGate) {
                     railwayManager.setBell("Bell_0", controller.openGate);

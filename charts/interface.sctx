@@ -25,7 +25,7 @@ scchart interface {
     output int trackSpeeds[48]
     //signals[track_id][num][red/yellow/green]
     // TODO: RailSL stuff + maybe interface people will manage this
-    output bool signals[48][2][3]
+    output bool signals[48][2][3]  
 
     output bool openGate
     output bool muteBell
@@ -88,4 +88,37 @@ scchart interface {
     const int OI_LN_0 = 45
     const int OI_LN_1 = 46
     const int OI_LN_2 = 47
+
+    initial state test 
+    immediate do signals[KH_LN_2][0][1] = true go to stop
+
+    // initial state setUp
+    // immediate do trackSpeeds[KH_ST_6] = 200; trackSpeeds[KH_LN_0] = 200; trackSpeeds[KH_LN_1] = 200; trackSpeeds[KH_LN_2] = 200; trackSpeeds[KH_LN_3] = 200; trackSpeeds[KH_LN_5] = 200; trackSpeeds[KH_LN_7] = 200; trackSpeeds[KH_LN_8] = 200; trackSpeeds[KH_ST_0] = 200; points[1] = BRANCH; points[14] = BRANCH go to start
+
+    // connector state start
+    // immediate do trackSpeeds[KH_ST_1] = 200 go to checkGate
+
+    // connector state checkGate
+    // immediate if contacts[KH_LN_0][1][0] == DIR_FORWARD do openGate = false; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate
+    // immediate go to waitcheckGate
+
+    // state waitcheckGate
+    // if contacts[KH_LN_0][1][0] == DIR_FORWARD do openGate = false; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate 
+
+    // connector state afterGate
+    // immediate if contacts[KH_LN_3][0][0] == DIR_FORWARD do openGate = true; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+    // immediate go to waitAfterGate
+
+    // state waitAfterGate 
+    // if contacts[KH_LN_3][0][0] == DIR_FORWARD do openGate = true; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+
+    // connector state checkConnector
+    // immediate if contacts[KH_ST_1][1][0] == DIR_FORWARD do trackSpeeds[KH_ST_1] = 200; lights[10] = true; lights[11] = true go to stop 
+    // immediate go to waitcheckConnector
+
+    // state waitcheckConnector
+    // if contacts[KH_ST_1][1][0] == DIR_FORWARD do trackSpeeds[KH_ST_1] = 200; lights[10] = true; lights[11] = true go to stop
+
+    final state stop
+    do lights[5] = true go to stop
 }   
