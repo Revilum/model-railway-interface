@@ -1,12 +1,20 @@
 import obj.Config;
 import obj.Contact;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import kieler_gen.Interface;
 
 public class Main {
+
+    // deep copy of bollean array
+    static boolean[][][] copy(boolean[][][] a) {
+        return Arrays.stream(a)
+                .map(p -> Arrays.stream(p).map(boolean[]::clone).toArray(boolean[][]::new))
+                .toArray(boolean[][][]::new);
+    }
 
     static boolean eqColours(boolean[] c1, boolean[] c2) {
         return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
@@ -25,7 +33,7 @@ public class Main {
         // old* vars and controller should not have the same reference to the same output arrays.
         controller.localReset();
 
-        boolean[][][] oldSignals = controller.signals.clone(); //TODO: not working
+        boolean[][][] oldSignals = copy(controller.signals); //TODO: not working
         boolean[] oldPoints = controller.points.clone();
         boolean[] oldLights = controller.lights.clone();
         int[] oldTrackSpeeds = controller.trackSpeeds.clone();
@@ -85,7 +93,7 @@ public class Main {
                         }
                     }
                 }
-                oldSignals = controller.signals.clone();
+                oldSignals = copy(controller.signals);
 
                 if (controller.openGate != oldOpenGate) {
                     railwayManager.setBell("Bell_0", controller.openGate);
