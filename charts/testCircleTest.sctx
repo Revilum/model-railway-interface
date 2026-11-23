@@ -1,0 +1,62 @@
+scchart interface {
+    // WARNING: This breaks RailSL probably
+    const int DIR_NONE = 0
+    const int DIR_FORWARD = 1
+    const int DIR_BACKWARD = 2
+    const int DIR_UNKNOWN = 3
+
+    /*
+    contacts[track_id][num][direction/count]
+    num: first or second contact on the track
+    NOTE: If a track has no contact the input values are undefined for the track segment.
+    0: direction of type DIR_* (in TCP protocol "type")
+    1: count TODO: What are these values??
+    */
+    input int contacts[4][2][2]
+
+    output bool lights[0]
+    
+    const bool STRAIGHT = false
+    const bool BRANCH = true
+    output bool points[2]
+
+    // signed byte negative: backwards
+    //WARNING: This breaks RailSL probably
+    output int trackSpeeds[4]
+    //signals[track_id][num][red/yellow/green]
+    // TODO: RailSL stuff + maybe interface people will manage this
+    output bool signals[4][2][3]  
+
+    output bool closeGate
+    output bool muteBell
+
+    // funny constants hahaha
+    const int C_ST_0 = 0
+    const int C_ST_1 = 1
+    const int C_LN_0 = 2
+    const int C_LN_1 = 3
+
+    initial state setUp
+    immediate do trackSpeeds[C_LN_0] = 200; trackSpeeds[C_LN_1] = 200; points[0] = BRANCH; points[1] = BRANCH go to start
+
+    connector state start
+    immediate do trackSpeeds[C_ST_1] = 200 go to checkSignals
+
+    connector state checkSignals
+    immediate if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][1][1] = true; signals[C_ST_1][1][1] = true go to checkStop
+    immediate go to waitcheckSignals
+
+    state waitcheckSignals
+    if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][1][1] = true; signals[C_ST_1][1][1] = true go to checkStop 
+
+
+    connector state checkStop
+    immediate if contacts[C_ST_1][1][1] == 2 do trackSpeeds[C_ST_1] = 0 go to stop 
+    immediate go to waitcheckConnector
+
+    state waitcheckConnector
+    if contacts[C_ST_1][1][1] == 2 do trackSpeeds[C_ST_1] = 0 go to stop 
+
+    final state stop
+
+}

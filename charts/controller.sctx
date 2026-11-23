@@ -1,6 +1,0 @@
-import "interface"
-
-scchart controller {
-    input bool bell
-    Interface(bell to muteBell)
-}

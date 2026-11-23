@@ -1,5 +1,6 @@
 import obj.Config;
 import obj.Contact;
+import obj.Railway;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,17 +12,16 @@ public class Main {
         return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
     }
     static void main() throws Exception {
-        Config conf = Config.getConfig();
+        Railway conf = Config.getConfig().railway;
         Interface controller = new Interface(false);
-        RailwayManager railwayManager = new RailwayManager(conf.addresses.simulation.railway);
-        railwayManager.connect();
+        RailwayManager railwayManager = new RailwayManager(conf.simulationAddresses);
 
         HashMap<String, Integer> trackToIndexMap = new HashMap<>();
         for (int i = 0; i < conf.tracks.length; ++i) {
             trackToIndexMap.putIfAbsent(conf.tracks[i], i);
         }
 
-        controller.localReset();
+        controller.reset();
 
         boolean[][][] oldSignals = controller.signals;
         boolean[] oldPoints = controller.points;
@@ -30,7 +30,9 @@ public class Main {
         boolean oldCloseGate = controller.closeGate;
 
         // old* vars and controller should not have the same reference to the same output arrays.
-        controller.localReset();
+        controller.reset();
+
+        railwayManager.connect();
 
         while (!controller.isTerminated()) {
             try {
@@ -97,7 +99,7 @@ public class Main {
 
                 // submit new railway State
                 railwayManager.setRailway(true);
-                Thread.sleep(conf.sleepMs);
+                Thread.sleep(Config.getConfig().sleepMs);
 
             } catch (Exception e) {
                 System.err.println("FATAL ERROR: STOPPING RAILWAY");

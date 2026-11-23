@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Cli {
     static void main() throws Exception {
-        RailwayManager railwayManager = new RailwayManager(Config.getConfig().addresses.simulation.railway);
+        RailwayManager railwayManager = new RailwayManager(Config.getConfig().testTrack.simulationAddresses);
 
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;

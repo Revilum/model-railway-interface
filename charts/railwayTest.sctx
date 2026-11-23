@@ -1,0 +1,122 @@
+scchart interface {
+
+    clock clk
+    // WARNING: This breaks RailSL probably
+    const int DIR_NONE = 0
+    const int DIR_FORWARD = 1
+    const int DIR_BACKWARD = 2
+    const int DIR_UNKNOWN = 3
+
+    /*
+    contacts[track_id][num][direction/count]
+    num: first or second contact on the track
+    NOTE: If a track has no contact the input values are undefined for the track segment.
+    0: direction of type DIR_* (in TCP protocol "type")
+    1: count TODO: What are these values??
+    */
+    input int contacts[48][2][2]
+
+    output bool lights[24]
+    
+    const bool STRAIGHT = false
+    const bool BRANCH = true
+    output bool points[30]
+
+    // signed byte negative: backwards
+    //WARNING: This breaks RailSL probably
+    output int trackSpeeds[48]
+    //signals[track_id][num][red/yellow/green]
+    // TODO: RailSL stuff + maybe interface people will manage this
+    output bool signals[48][2][3]  
+
+    output bool closeGate
+    output bool muteBell
+
+    // funny constants hahaha
+    const int KH_ST_0 = 0
+    const int KH_ST_1 = 1
+    const int KH_ST_2 = 2
+    const int KH_ST_3 = 3
+    const int KH_ST_4 = 4
+    const int KH_ST_5 = 5
+    const int KH_ST_6 = 6
+
+    const int KH_LN_0 = 7
+    const int KH_LN_1 = 8
+    const int KH_LN_2 = 9
+    const int KH_LN_3 = 10
+    const int KH_LN_4 = 11
+    const int KH_LN_5 = 12
+    const int KH_LN_6 = 13
+    const int KH_LN_7 = 14
+    const int KH_LN_8 = 15
+
+    const int KIO_LN_0 = 16
+    const int KIO_LN_1 = 17
+
+    const int OC_ST_0 = 18
+    const int OC_ST_1 = 19
+    const int OC_ST_2 = 20
+    const int OC_ST_3 = 21
+    const int OC_ST_4 = 22
+
+    const int OC_LN_0 = 23
+    const int OC_LN_1 = 24
+    const int OC_LN_2 = 25
+    const int OC_LN_3 = 26
+    const int OC_LN_4 = 27
+    const int OC_LN_5 = 28
+
+    const int OC_JCT_0 = 29
+    const int IC_JCT_0 = 30
+
+    const int IC_LN_0 = 31
+    const int IC_LN_1 = 32
+    const int IC_LN_2 = 33
+    const int IC_LN_3 = 34
+    const int IC_LN_4 = 35
+    const int IC_LN_5 = 36
+
+    const int IC_ST_0 = 37
+    const int IC_ST_1 = 38
+    const int IC_ST_2 = 39
+    const int IC_ST_3 = 40
+    const int IC_ST_4 = 41
+
+    const int IO_LN_0 = 42
+    const int IO_LN_1 = 43
+    const int IO_LN_2 = 44
+
+    const int OI_LN_0 = 45
+    const int OI_LN_1 = 46
+    const int OI_LN_2 = 47
+
+    initial state setUp
+    immediate do trackSpeeds[KH_ST_6] = 200; trackSpeeds[KH_LN_0] = 200; trackSpeeds[KH_LN_1] = 200; trackSpeeds[KH_LN_2] = 200; trackSpeeds[KH_LN_3] = 200; trackSpeeds[KH_LN_5] = 200; trackSpeeds[KH_LN_7] = 200; trackSpeeds[KH_LN_8] = 200; trackSpeeds[KH_ST_0] = 200; points[1] = BRANCH; points[14] = BRANCH go to start
+
+    connector state start
+    immediate do trackSpeeds[KH_ST_1] = 200 go to checkGate
+
+    connector state checkGate
+    immediate if contacts[KH_LN_0][1][0] == DIR_FORWARD do closeGate = true; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate
+    immediate go to waitcheckGate
+
+    state waitcheckGate
+    if contacts[KH_LN_0][1][0] == DIR_FORWARD do closeGate = true; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate 
+
+    connector state afterGate
+    immediate if contacts[KH_LN_3][0][0] == DIR_FORWARD do closeGate = false; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+    immediate go to waitAfterGate
+
+    state waitAfterGate 
+    if contacts[KH_LN_3][0][0] == DIR_FORWARD do closeGate = false; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+
+    connector state checkConnector
+    immediate if contacts[KH_ST_1][1][1] == 2 do trackSpeeds[KH_ST_1] = 0; lights[10] = true; lights[11] = true go to stop 
+    immediate go to waitcheckConnector
+
+    state waitcheckConnector
+    if contacts[KH_ST_1][1][1] == 2 do trackSpeeds[KH_ST_1] = 0; lights[10] = true; lights[11] = true go to stop
+
+    final state stop
+}   
