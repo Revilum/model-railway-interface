@@ -16,7 +16,7 @@ bash compile_sctx.sh /path/to/your/sctx/file.sctx
 mvn install
 ```
 
-You can find the compiled `.jar` in the `target/` directory.
+You can find the compiled `.jar` in `target/interface-x.x-with-dependencies.jar`.
 
 The executable jar uses `Main` as its default entrypoint. To build it with another entrypoint:
 ```bash

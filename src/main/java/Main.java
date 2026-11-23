@@ -12,7 +12,7 @@ public class Main {
         return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
     }
     static void main() throws Exception {
-        Railway conf = Config.getConfig().railway;
+        Railway conf = Config.getConfig().testTrack;
         Interface controller = new Interface(false);
         RailwayManager railwayManager = new RailwayManager(conf.simulationAddresses);
 

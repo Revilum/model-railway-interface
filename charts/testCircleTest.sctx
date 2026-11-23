@@ -43,11 +43,11 @@ scchart interface {
     immediate do trackSpeeds[C_ST_1] = 200 go to checkSignals
 
     connector state checkSignals
-    immediate if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][0][1] = true; signals[C_ST_1][1][1] = true go to checkStop
+    immediate if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][1][1] = true; signals[C_ST_1][1][1] = true go to checkStop
     immediate go to waitcheckSignals
 
     state waitcheckSignals
-    if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][0][1] = true; signals[C_ST_1][1][1] = true go to checkStop 
+    if contacts[C_LN_0][1][0] == DIR_FORWARD do signals[C_ST_0][1][1] = true; signals[C_ST_1][1][1] = true go to checkStop 
 
 
     connector state checkStop
