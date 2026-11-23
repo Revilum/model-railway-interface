@@ -7,7 +7,6 @@ import java.util.Map;
 import kieler_gen.Interface;
 
 public class Main {
-
     static boolean eqColours(boolean[] c1, boolean[] c2) {
         return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
     }
@@ -22,21 +21,23 @@ public class Main {
             trackToIndexMap.putIfAbsent(conf.tracks[i], i);
         }
 
+        controller.localReset();
+
+        boolean[][][] oldSignals = controller.signals;
+        boolean[] oldPoints = controller.points;
+        boolean[] oldLights = controller.lights;
+        int[] oldTrackSpeeds = controller.trackSpeeds;
+        boolean oldCloseGate = controller.closeGate;
+
         // old* vars and controller should not have the same reference to the same output arrays.
         controller.localReset();
 
-        boolean[][][] oldSignals = controller.signals.clone(); //TODO: not working
-        boolean[] oldPoints = controller.points.clone();
-        boolean[] oldLights = controller.lights.clone();
-        int[] oldTrackSpeeds = controller.trackSpeeds.clone();
-        boolean oldOpenGate = controller.openGate;
-
-        while (!controller.isFinal()) {
+        while (!controller.isTerminated()) {
             try {
                 // request new contact data for controller input
                 for (Map.Entry<String, Contact[]> entry : railwayManager.requestContacts().entrySet()) {
                     Integer trackIndex = trackToIndexMap.get(entry.getKey());
-                    if (trackIndex == null) {
+                    if (trackIndex == null) { // Track has no contacts
                         continue;
                     }
                     int trackI = trackIndex;
@@ -57,24 +58,24 @@ public class Main {
                 for (int i = 0; i < controller.points.length; ++i) {
                     if (controller.points[i] != oldPoints[i]) {
                         railwayManager.setPoint("PNT_" + i, controller.points[i]);
+                        oldPoints[i] = controller.points[i];
                     }
                 }
-                oldPoints = controller.points.clone();
 
                 for (int i = 0; i < controller.lights.length; ++i) {
                     if (controller.lights[i] != oldLights[i]) {
                         railwayManager.setLight("L_" + i, controller.lights[i]);
+                        oldLights[i] = controller.lights[i];
                     }
                 }
-                oldLights = controller.lights.clone();
 
                 for (int i = 0; i < controller.trackSpeeds.length; ++i) {
                     int speed = controller.trackSpeeds[i];
                     if (speed != oldTrackSpeeds[i]) {
                         railwayManager.setTrack(conf.tracks[i], speed == 0 ? 0 : speed > 0 ? 1 : 2, speed);
+                        oldTrackSpeeds[i] = controller.trackSpeeds[i];
                     }
                 }
-                oldTrackSpeeds = controller.trackSpeeds.clone();
 
                 for (int i = 0; i < controller.signals.length; ++i) {
                     boolean[][] trackSignals = controller.signals[i];
@@ -82,17 +83,17 @@ public class Main {
                         // if signal actually exists and the color has changed
                         if (trackSignals[j] != null && !eqColours(trackSignals[j], oldSignals[i][j])) {
                             railwayManager.setSignal(conf.tracks[i], j, trackSignals[j]);
+                            oldSignals[i][j] = trackSignals[j].clone();
                         }
                     }
                 }
-                oldSignals = controller.signals.clone();
 
-                if (controller.openGate != oldOpenGate) {
-                    railwayManager.setBell("Bell_0", controller.openGate);
-                    railwayManager.setGate("Gate_0", controller.openGate);
-                    railwayManager.setGate("Gate_1", controller.openGate);
+                if (controller.closeGate != oldCloseGate) {
+                    railwayManager.setBell("Bell_0", controller.closeGate);
+                    railwayManager.setGate("Gate_0", controller.closeGate);
+                    railwayManager.setGate("Gate_1", controller.closeGate);
                 }
-                oldOpenGate = controller.openGate;
+                oldCloseGate = controller.closeGate;
 
                 // submit new railway State
                 railwayManager.setRailway(true);
@@ -106,5 +107,8 @@ public class Main {
             }
 
         }
+
+        railwayManager.resetRailway();
+        railwayManager.disconnect(true, true);
     }
 }
