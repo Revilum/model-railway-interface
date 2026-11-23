@@ -1,4 +1,6 @@
 scchart interface {
+
+    clock clk
     // WARNING: This breaks RailSL probably
     const int DIR_NONE = 0
     const int DIR_FORWARD = 1
