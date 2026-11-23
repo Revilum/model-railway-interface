@@ -27,7 +27,7 @@ scchart interface {
     // TODO: RailSL stuff + maybe interface people will manage this
     output bool signals[48][2][3]  
 
-    output bool openGate
+    output bool closeGate
     output bool muteBell
 
     // funny constants hahaha
@@ -96,18 +96,18 @@ scchart interface {
     immediate do trackSpeeds[KH_ST_1] = 200 go to checkGate
 
     connector state checkGate
-    immediate if contacts[KH_LN_0][1][0] == DIR_FORWARD do openGate = false; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate
+    immediate if contacts[KH_LN_0][1][0] == DIR_FORWARD do closeGate = true; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate
     immediate go to waitcheckGate
 
     state waitcheckGate
-    if contacts[KH_LN_0][1][0] == DIR_FORWARD do openGate = false; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate 
+    if contacts[KH_LN_0][1][0] == DIR_FORWARD do closeGate = true; signals[KH_LN_2][0][1] = true; signals[KH_LN_2][1][1] = true go to afterGate 
 
     connector state afterGate
-    immediate if contacts[KH_LN_3][0][0] == DIR_FORWARD do openGate = true; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+    immediate if contacts[KH_LN_3][0][0] == DIR_FORWARD do closeGate = false; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
     immediate go to waitAfterGate
 
     state waitAfterGate 
-    if contacts[KH_LN_3][0][0] == DIR_FORWARD do openGate = true; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
+    if contacts[KH_LN_3][0][0] == DIR_FORWARD do closeGate = false; signals[KH_LN_2][0][0] = true; signals[KH_LN_2][1][0] = true go to checkConnector
 
     connector state checkConnector
     immediate if contacts[KH_ST_1][1][1] == 2 do trackSpeeds[KH_ST_1] = 0; lights[10] = true; lights[11] = true go to stop 
@@ -117,5 +117,4 @@ scchart interface {
     if contacts[KH_ST_1][1][1] == 2 do trackSpeeds[KH_ST_1] = 0; lights[10] = true; lights[11] = true go to stop
 
     final state stop
-    do lights[5] = true go to stop
 }   
